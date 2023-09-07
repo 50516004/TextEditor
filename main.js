@@ -1,47 +1,60 @@
 // 要素の取得
 const editor = document.querySelector('#editor');
+const btnBold = document.querySelector('#btn-b');
+const btnItalic = document.querySelector('#btn-i');
+const btnUl = document.querySelector('#btn-ul');
+const btnOl = document.querySelector('#btn-ol');
+const btnTable = document.querySelector('#btn-table');
+
 // フォーカスされた要素
 let focused = null;
-// let range = document.createRange();
-// range.setStart(editor, 2);
-// range.setEnd(editor, 2);
-// window.getSelection().addRange(range);
 
-function applyFocus() {
-	const node = document.getSelection().anchorNode;
-	let elem = node.hasChildNodes() ? node : node.parentNode;
-	
+// フォーカスを設定
+function setFocus() {
+	const selection = document.getSelection();
+	const anchor = selection.anchorNode;
+	const elem = anchor.hasChildNodes() ? anchor : anchor.parentNode;
+
 	if (elem && elem.matches("#editor *")) {
 		focused = elem;
+		console.log(selection);
+		console.log(focused);
 	}
 }
 
-document.addEventListener('selectionchange', () => {
-	if(focused) {
+function changeFocus() {
+	if (focused) {
 		focused.classList.remove('focused');
 	}
-	applyFocus();
-	focused.classList.add('focused');
-	console.log(focused);
+	setFocus();
+	if (focused) {
+		focused.classList.add('focused');
+	}
+}
+
+// セレクション更新時イベント
+document.addEventListener('selectionchange', () => {
+	changeFocus();
 });
 
-$('#btn-b').on('click', function () {
-	let selection = window.getSelection();
-	let newNode = document.createElement('b');
+btnBold.addEventListener('click', function () {
+	const selection = window.getSelection();
+	const newNode = document.createElement('b');
 	if (selection.rangeCount > 0) {
 		selection.getRangeAt(0).surroundContents(newNode);
 	}
 });
 
-$('#btn-i').on('click', function () {
-	let selection = window.getSelection();
-	let newNode = document.createElement('i');
-	if (selection.rangeCount > 0) {
-		selection.getRangeAt(0).surroundContents(newNode);
-	}
+btnItalic.addEventListener('click', function () {
+	const selection = window.getSelection();
+	const next = focused.nextSibling;
+
+	selection.collapse(next, 0);
+	console.log(selection);
+	changeFocus();
 });
 
-$('#btn-ul').on('click', function () {
+btnUl.addEventListener('click', function () {
 	const $target = $(focused);
 	if ($target) {
 		let $ul = $('<ul><li><br></li></ul>');
@@ -53,7 +66,7 @@ $('#btn-ul').on('click', function () {
 	}
 });
 
-$('#btn-ol').on('click', function () {
+btnOl.addEventListener('click', function () {
 	const $target = $(focused);
 	if ($target) {
 		let $ol = $('<ol><li><br></li></ol>');
@@ -62,7 +75,7 @@ $('#btn-ol').on('click', function () {
 	}
 });
 
-$('#btn-table').on('click', function () {
+btnTable.addEventListener('click', function () {
 	const $target = $(focused);
 	if ($target) {
 		let $table = tableOf(2, 2);

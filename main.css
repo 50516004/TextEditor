@@ -1,7 +1,5 @@
 /* 全体 */
-
 body {
-	background-color: white;
 	margin: 0;
 }
 
@@ -31,6 +29,7 @@ main {
 	background-color: white;
 	border: solid 1px gray;
 	padding: 0.5em;
+	cursor: pointer;
 }
 
 #control button:hover {
@@ -44,11 +43,7 @@ main {
 	outline: none;
 }
 
-#editor>* {
-	border: 1px solid rgba(0, 0, 0, 0);
-}
-
-#editor>*.focused {
+#editor *.focused {
 	border: 1px solid royalblue;
 }
 
