@@ -17,12 +17,13 @@ function setFocus() {
 
 	if (elem && elem.matches("#editor *")) {
 		focused = elem;
-		console.log(selection);
-		console.log(focused);
+		// console.log(selection);
+		// console.log(focused);
 	}
 }
 
-function changeFocus() {
+// セレクション更新時イベント
+document.addEventListener('selectionchange', () => {
 	if (focused) {
 		focused.classList.remove('focused');
 	}
@@ -30,28 +31,22 @@ function changeFocus() {
 	if (focused) {
 		focused.classList.add('focused');
 	}
-}
-
-// セレクション更新時イベント
-document.addEventListener('selectionchange', () => {
-	changeFocus();
 });
 
-btnBold.addEventListener('click', function () {
-	const selection = window.getSelection();
+// ボタン
+btnBold.addEventListener('click', () => {
+	const selection = document.getSelection();
 	const newNode = document.createElement('b');
 	if (selection.rangeCount > 0) {
-		selection.getRangeAt(0).surroundContents(newNode);
+		const range = selection.getRangeAt(0);
+		newNode.appendChild(range.extractContents());
+		range.insertNode(newNode);
 	}
 });
 
 btnItalic.addEventListener('click', function () {
-	const selection = window.getSelection();
-	const next = focused.nextSibling;
-
-	selection.collapse(next, 0);
+	const selection = document.getSelection();
 	console.log(selection);
-	changeFocus();
 });
 
 btnUl.addEventListener('click', function () {
